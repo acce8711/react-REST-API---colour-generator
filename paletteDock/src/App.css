@@ -67,7 +67,7 @@ button {
 
  /*colour picker*/
 
-.colour-picker {
+.modal-bg-size {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -80,7 +80,7 @@ button {
     align-items: center;
  }
 
- .picker-bg {
+ .modal-bg {
     background: #f74c4c19;
     position: fixed;
     top: 0;

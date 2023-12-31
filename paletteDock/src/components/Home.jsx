@@ -7,7 +7,7 @@ import { useState } from "react"
 
 export default function Home()
 {
-    const [navItem, setNavItem] = useState(0);
+    const [navItem, setNavItem] = useState(1);
 
     const changeNavItem = (navID) => {
         setNavItem(navID);
