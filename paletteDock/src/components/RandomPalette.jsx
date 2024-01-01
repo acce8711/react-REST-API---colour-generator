@@ -12,25 +12,14 @@ export default function RandomPalette(props) {
         const fetchData = async() => {
             const data = await props.getAllPalettes()
             setPalettes(data)
-            //randomize()
         }
     
         fetchData()
     }, [])
 
-    const getPalettes = async() => {
-        let data = []
-        try {
-            const response = await fetch("https://palettedock.onrender.com/palettes")
-            data = await response.json()
-            
-        } catch (err) {
-            alert(err.message)
-        }
-
-        return data;
-        
-    }
+    useEffect(() => {
+        randomize()
+    }, [palettes.length])
 
     const randomize = () => {
         const randIndex = Math.floor(Math.random() * (palettes.length))
@@ -41,7 +30,6 @@ export default function RandomPalette(props) {
     let palette = []
     if(palettes.length > 0)
     {
-        console.log(palettes.length)
         palette = palettes[randomIndex].hexValues.map(value => (
             <ColourBox colourCode={value} key={nanoid()}/>
         ))

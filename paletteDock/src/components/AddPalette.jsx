@@ -137,7 +137,12 @@ export default function AddPalette() {
                 {palette}
             </div>
             <div>
-                <button>random</button>
+                <button>
+                    auto generate
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.08317 4.95829H4.38659C5.35026 3.59737 6.80435 2.83329 8.49984 2.83329C11.6295 2.83329 14.1665 5.37035 14.1665 8.49996H15.5832C15.5832 4.58794 12.4119 1.41663 8.49984 1.41663C6.51351 1.41663 4.76345 2.25424 3.5415 3.73312V1.41663H2.12484V6.37496H7.08317V4.95829ZM9.9165 12.0416H12.6131C11.6494 13.4025 10.1953 14.1666 8.49984 14.1666C5.37022 14.1666 2.83317 11.6296 2.83317 8.49996H1.4165C1.4165 12.412 4.58782 15.5833 8.49984 15.5833C10.4862 15.5833 12.2362 14.7457 13.4582 13.2668V15.5833H14.8748V10.625H9.9165V12.0416Z" fill="#4690FF"/>
+                    </svg>
+                </button>
                 <form onSubmit={uploadPalette}>
                     <input
                     type="text"
@@ -155,9 +160,6 @@ export default function AddPalette() {
             <ColourPicker colourChangeHandle = {changeColour} colourCode = {colours[pickerValues.id]} id = {pickerValues.id} hidePicker={() => toggleColourPicker(false)}/>
             }
 
-            {
-                console.log(shareModal)
-            }
             {shareModal.show &&
             <ShareModal hideModal={hideShareModal} colourCodes={shareModal.palette} paletteName={shareModal.paletteName}/>}
 
