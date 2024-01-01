@@ -7,10 +7,22 @@ import { useState } from "react"
 
 export default function Home()
 {
-    const [navItem, setNavItem] = useState(1);
+    const [navItem, setNavItem] = useState(2);
 
     const changeNavItem = (navID) => {
         setNavItem(navID);
+    }
+
+    const getPalettes = async() => {
+        try {
+            const response = await fetch("https://palettedock.onrender.com/palettes")
+            const data = await response.json()
+            return data;
+        } catch (err) {
+            alert(err.message)
+            
+        }
+        
     }
 
     return (
@@ -24,12 +36,12 @@ export default function Home()
 
             { //view all
             navItem == 1 && 
-                <AllPalettes />
+                <AllPalettes getAllPalettes={getPalettes}/>
             }
 
             { //randomize
             navItem == 2 && 
-                <RandomPalette />
+                <RandomPalette getAllPalettes={getPalettes}/>
             }
 
         </div>

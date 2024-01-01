@@ -3,25 +3,25 @@ import { nanoid } from "nanoid"
 
 import PaletteItem from "./PaletteItem"
 
-export default function AddPalette() {
+export default function AllPalette(props) {
     const [palettes, setPalettes] = useState([ ])
 
     useEffect(() => {
-        getPalettes()
+        const fetchData = async() => {
+            const data = await props.getAllPalettes()
+            console.log(data)
+            setPalettes([...data])
+        }
+        
+
+        fetchData()
     }, [])
 
-    const getPalettes = async() => {
-        try {
-            const response = await fetch("https://palettedock.onrender.com/palettes")
-            const data = await response.json()
-            setPalettes(data)
-        } catch (err) {
-            alert(err.message)
-        }
-    }
 
-    const palettesToRender = palettes.map(value => {
-        <PaletteItem colourCode={value.id} name={value.name} votes={value.votes} id={value.hexValues} key={nanoid()}/>
+    const palettesToRender = palettes.map((item) => {
+        return(
+            <PaletteItem id={item.id} name={item.name} votes={item.votes} palette={item.hexValues} key={nanoid()}/>
+        )
     })
 
     return (
@@ -31,7 +31,9 @@ export default function AddPalette() {
                 <button>filter</button>
             </div>
             <div className="palettes-view">
-
+                {console.log(palettesToRender)}
+                {palettesToRender}
+                
             </div>
             
         </div>

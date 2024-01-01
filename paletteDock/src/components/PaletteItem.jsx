@@ -12,7 +12,7 @@ export default function PaletteItem (props) {
         <div className="all-palettes">
             <div className="spread-horizontal-flex">
                 <h3>{props.name}</h3>
-                <LikeButton />
+                <LikeButton numVotes={props.votes} id={props.id}/>
             </div>
             {palette}
         </div>

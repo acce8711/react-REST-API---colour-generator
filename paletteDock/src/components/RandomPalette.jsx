@@ -1,7 +1,68 @@
-export default function AddPalette() {
+import { useState, useEffect } from "react"
+import { nanoid } from "nanoid"
+
+import ColourBox from "./ColourBox"
+import LikeButton from "./LikeButton"
+
+export default function RandomPalette(props) {
+    const [palettes, setPalettes] = useState([])
+    const [randomIndex, setRandomIndex] = useState(0)
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const data = await props.getAllPalettes()
+            setPalettes(data)
+            //randomize()
+        }
+    
+        fetchData()
+    }, [])
+
+    const getPalettes = async() => {
+        let data = []
+        try {
+            const response = await fetch("https://palettedock.onrender.com/palettes")
+            data = await response.json()
+            
+        } catch (err) {
+            alert(err.message)
+        }
+
+        return data;
+        
+    }
+
+    const randomize = () => {
+        const randIndex = Math.floor(Math.random() * (palettes.length))
+        setRandomIndex(randIndex)
+    }
+
+
+    let palette = []
+    if(palettes.length > 0)
+    {
+        console.log(palettes.length)
+        palette = palettes[randomIndex].hexValues.map(value => (
+            <ColourBox colourCode={value} key={nanoid()}/>
+        ))
+    } 
+
+
     return (
         <div className="">
-            I am randomize
+            {palettes.length > 0 &&
+             <div>
+                <button onClick={randomize}>randomize</button>
+            
+                <h2>{palettes[randomIndex].name}</h2>
+                
+                {palette}
+
+                <LikeButton numVotes={palettes[randomIndex].votes} id={palettes[randomIndex].id}/>
+             </div>
+            }
+
         </div>
+
     )
 }
