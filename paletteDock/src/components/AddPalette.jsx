@@ -1,4 +1,5 @@
-import { colors } from "@mui/material";
+
+import OpenAI from "openai";
 import AddColour from "./AddColour"
 import PendingColour from "./PendingColour";
 import ColourPicker from "./ColourPicker";
@@ -9,6 +10,14 @@ import { RegExpMatcher,
 	TextCensor,
 	englishDataset,
 	englishRecommendedTransformers } from "obscenity";
+
+
+const openai = new OpenAI(
+    {
+        apiKey: import.meta.env.VITE_API_KEY,
+        dangerouslyAllowBrowser: true
+    }
+)
 
 
 export default function AddPalette() {
@@ -30,6 +39,44 @@ export default function AddPalette() {
         valid: true,
         errorMessage: ""
     });
+
+    
+    const [generatingText, setGenerating] = useState(false)
+    const [chatError, setChatError] = useState(false);
+    const [apiError, setApiError] = useState(false);
+        
+    const handleSubmit = async () => {
+        setApiError(false);
+
+        //setChatQuestion("")
+        //setQuestionToDisplay(message);
+        setGenerating(true)
+        //let contentToAdd = {question: message,content: ""}
+        const length = colours.filter(value => value == "empty").length;
+        const content = length > 4? "generate a 2 word random colour palette name" : `generate a 2 word name to describe this palette: ${colours}`;
+        await openai.chat.completions.create(
+            {
+                model: "gpt-3.5-turbo",
+                messages: [
+                {
+                    role: "user",
+                    content: content
+                }],
+            }
+            ).then((result) => {
+           // contentToAdd.content = result.choices[0].message.content;
+           // props.setChat(prevValue => ([...prevValue, contentToAdd]))
+            let paletteNameTemp = result.choices[0].message.content;
+            paletteNameTemp = paletteNameTemp.replace(/"/g, "")
+            paletteNameTemp = paletteNameTemp.toLowerCase()
+
+            setPaletteName(prev => ({...prev, name: paletteNameTemp}))
+            setGenerating(false)
+            }).catch(error => setApiError(true)) 
+        
+
+    }
+    
 
     //changing colour based on colour picker
     const changeColour = (value, id) => {
@@ -137,7 +184,7 @@ export default function AddPalette() {
                 {palette}
             </div>
             <div>
-                <button>
+                <button onClick={handleSubmit}>
                     auto generate
                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.08317 4.95829H4.38659C5.35026 3.59737 6.80435 2.83329 8.49984 2.83329C11.6295 2.83329 14.1665 5.37035 14.1665 8.49996H15.5832C15.5832 4.58794 12.4119 1.41663 8.49984 1.41663C6.51351 1.41663 4.76345 2.25424 3.5415 3.73312V1.41663H2.12484V6.37496H7.08317V4.95829ZM9.9165 12.0416H12.6131C11.6494 13.4025 10.1953 14.1666 8.49984 14.1666C5.37022 14.1666 2.83317 11.6296 2.83317 8.49996H1.4165C1.4165 12.412 4.58782 15.5833 8.49984 15.5833C10.4862 15.5833 12.2362 14.7457 13.4582 13.2668V15.5833H14.8748V10.625H9.9165V12.0416Z" fill="#4690FF"/>
