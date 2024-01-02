@@ -11,6 +11,8 @@
     --white: #FFFFFF;
     --black: #000000;
     --hover-grey: #767676;
+    --red: #FF6262;
+    --pale-red: #FFE5E5;
 }
 
 .home {
@@ -21,12 +23,13 @@
 }
 
 .max-width {
+    background-color: antiquewhite;
     width: 100%;
     max-width: 1200px;
     padding: 30px 60px;
 }
 
-button {
+button, input {
     border: none;
     text-decoration: none;
     background: none;
@@ -87,5 +90,104 @@ button {
     right: 0;
     bottom: 0;
     left: 0;
-    
  }
+
+ /*add-palette*/
+.column-flex {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 4vh;
+}
+
+.column-flex-2 {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+}
+
+.gap-xs {
+   gap: 5px;
+}
+
+.gap-sm {
+   gap: 15px;
+}
+
+.spread-horizontal-flex {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: var(--white);
+   padding: 40px 80px;
+   gap: 20px;
+   border-radius: 30px;
+   width: 750px;
+}
+
+.horizontal-flex {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.black-stroke {
+   border: 1px solid var(--black);
+}
+
+.grey-stroke {
+   border: 1px solid var(--hover-grey);
+}
+
+.colour-box {
+   border-radius: 20px;
+   width: 100px;
+   height: 100px;
+   transition: .2s;
+}
+
+.colour-box:hover {
+   width: 120px;
+   height: 120px;
+   transition: .2s;
+}
+
+.add-palette {
+   height: 250px;
+}
+
+/*pending colour*/
+.pending-colour {
+   width: 100px;
+}
+
+.height-sm {
+   height: 40px;
+}
+
+.delete {
+   padding: 0 8px;
+   border-radius: 20px;
+   width: 100%;
+   border: 1px solid var(--red);
+   color: var(--red);
+   gap: 5px;
+}
+
+.delete:hover {
+   background-color: var(--pale-red);
+   border: none;
+}
+
+.share {
+   padding: 0 10px;
+   border-radius: 10px;
+   background-color: var(--white);
+   height: 30px;
+}
+
+.share:disabled {
+   border: 1px solid var(--hover-grey);
+   background-color: rgb(221, 221, 221);
+}
