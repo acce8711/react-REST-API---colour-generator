@@ -20,7 +20,7 @@ const openai = new OpenAI(
 )
 
 
-export default function AddPalette() {
+export default function AddPalette(props) {
     const [colours, setColours] = useState([
         "empty",
         "empty",
@@ -110,11 +110,12 @@ export default function AddPalette() {
     //uploading palette to json-server
     const uploadPalette = async(e) => {
         e.preventDefault();
-        
+        props.updateLoad(true);
         const inputCheckMessage = verifyInput(paletteName.name);
         if(inputCheckMessage.length > 0) 
         {
             setPaletteName(prev => ({...prev, valid: false, errorMessage: inputCheckMessage}))
+            props.updateLoad(false);
             return;
         }
         else
@@ -144,7 +145,8 @@ export default function AddPalette() {
                 setColours(prev => prev.map(()=>"empty"))
             } catch (err) {
                 alert(err.message)
-            }
+            } 
+            props.updateLoad(false);
     }
 
     //checking for obscene language and input length
@@ -172,22 +174,22 @@ export default function AddPalette() {
         colours[index] == "empty" ?
         <AddColour key={nanoid()} colourCode={value} togglePicker={()=> toggleColourPicker(true, index)} />
         :
-        <PendingColour key={nanoid()} colourCode={value} togglePicker={()=> toggleColourPicker(true, index)} removeColour = {() => changeColour("empty", index)} />
+        <PendingColour key={nanoid()} colourCode={value} small={false} togglePicker={()=> toggleColourPicker(true, index)} removeColour = {() => changeColour("empty", index)} />
         )
     })
 
 
     return (
-        <div className="column-flex max-width">
+        <div className="column-flex max-width gap-md m-50">
             <h2>share your colour palette with the community.</h2>
-            <div className="spread-horizontal-flex black-stroke add-palette">   
+            <div className="spread-horizontal-flex black-stroke add-palette gap-md">   
                 {palette}
             </div>
-            <div>
-                <button onClick={handleSubmit}>
+            <div className="gap-xs">
+                <button onClick={handleSubmit} className="button-hover auto-generate">
                     auto generate
-                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.08317 4.95829H4.38659C5.35026 3.59737 6.80435 2.83329 8.49984 2.83329C11.6295 2.83329 14.1665 5.37035 14.1665 8.49996H15.5832C15.5832 4.58794 12.4119 1.41663 8.49984 1.41663C6.51351 1.41663 4.76345 2.25424 3.5415 3.73312V1.41663H2.12484V6.37496H7.08317V4.95829ZM9.9165 12.0416H12.6131C11.6494 13.4025 10.1953 14.1666 8.49984 14.1666C5.37022 14.1666 2.83317 11.6296 2.83317 8.49996H1.4165C1.4165 12.412 4.58782 15.5833 8.49984 15.5833C10.4862 15.5833 12.2362 14.7457 13.4582 13.2668V15.5833H14.8748V10.625H9.9165V12.0416Z" fill="#4690FF"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 17 17" fill="none">
+                        <path className={generatingText?"load-icon":""} fill-rule="evenodd" clip-rule="evenodd" d="M7.08317 4.95829H4.38659C5.35026 3.59737 6.80435 2.83329 8.49984 2.83329C11.6295 2.83329 14.1665 5.37035 14.1665 8.49996H15.5832C15.5832 4.58794 12.4119 1.41663 8.49984 1.41663C6.51351 1.41663 4.76345 2.25424 3.5415 3.73312V1.41663H2.12484V6.37496H7.08317V4.95829ZM9.9165 12.0416H12.6131C11.6494 13.4025 10.1953 14.1666 8.49984 14.1666C5.37022 14.1666 2.83317 11.6296 2.83317 8.49996H1.4165C1.4165 12.412 4.58782 15.5833 8.49984 15.5833C10.4862 15.5833 12.2362 14.7457 13.4582 13.2668V15.5833H14.8748V10.625H9.9165V12.0416Z" fill="#4690FF"/>
                     </svg>
                 </button>
                 <form onSubmit={uploadPalette} className="horizontal-flex gap-xs">
@@ -196,12 +198,17 @@ export default function AddPalette() {
                     value={paletteName.name}
                     onChange={changePaletteName}
                     name="paletteName"
-                    className="share black-stroke"
+                    className={`share black-stroke`}
                     />
-                    <button disabled={colours.filter(x => x == "empty").length > 3} onClick={uploadPalette} className="share black-stroke">share</button>
+                    <button disabled={colours.filter(x => x == "empty").length > 3} onClick={uploadPalette} className={`share black-stroke` }>share</button>
                 </form>
                 {!paletteName.valid &&
-                <p>{paletteName.errorMessage}</p>}
+                <span className="error-msg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 25 25" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 25C5.59644 25 0 19.4036 0 12.5C0 5.59644 5.59644 0 12.5 0C19.4036 0 25 5.59644 25 12.5C25 19.4036 19.4036 25 12.5 25ZM12.5 22.7273C18.1484 22.7273 22.7273 18.1484 22.7273 12.5C22.7273 6.85163 18.1484 2.27273 12.5 2.27273C6.85163 2.27273 2.27273 6.85163 2.27273 12.5C2.27273 18.1484 6.85163 22.7273 12.5 22.7273ZM13.6405 14.7708H14.7761V17.0436H10.2306V14.7708H11.367V12.4981H10.2306V10.2254H13.6405V14.7708ZM12.5004 9.08903C11.8726 9.08903 11.3636 8.58026 11.3636 7.95267C11.3636 7.32507 11.8726 6.8163 12.5004 6.8163C13.1282 6.8163 13.6371 7.32507 13.6371 7.95267C13.6371 8.58026 13.1282 9.08903 12.5004 9.08903Z" fill="#FF6262"/>
+                    </svg>
+                    <p>{paletteName.errorMessage}</p>
+                </span>}
             </div>
 
             {pickerValues.toggle && 

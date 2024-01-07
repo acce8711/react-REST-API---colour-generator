@@ -15,9 +15,9 @@ export default function PendingColour(props) {
             </svg>
             
             </button>
-            <button className="colour-box grey-stroke" style={styles} onClick={props.togglePicker}>
+            <button className="box grey-stroke" style={styles} onClick={props.togglePicker}>
             </button> 
-            <h3 className="height-sm">{props.colourCode}</h3>      
+            <h4 className="height-sm">{props.colourCode.toUpperCase()}</h4>      
         </div>
     )
 }

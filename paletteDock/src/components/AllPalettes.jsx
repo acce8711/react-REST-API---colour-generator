@@ -11,11 +11,11 @@ export default function AllPalette(props) {
     useEffect(() => {
         const fetchData = async() => {
             const data = await props.getAllPalettes()
-            console.log(data)
             setPalettes([...data])
             setFilteredPalettes([...data].reverse())
         }
         fetchData()
+        
     }, [])
 
     const updateFilter = (e) => {
@@ -35,8 +35,8 @@ export default function AllPalette(props) {
     })
 
     return (
-        <div className="all-palettes">
-            <div className="spread-horizontal-flex">
+        <div className="column-flex max-width gap-sm m-50">
+            <div className="spread-horizontal-flex-2 ">
                 <h2>colour palettes.</h2>
                 <select name="filter" id="filter" onChange={updateFilter}>
                     <option value={0}>newest</option>
@@ -44,7 +44,6 @@ export default function AllPalette(props) {
                 </select>
             </div>
             <div className="palettes-view">
-                {console.log(palettesToRender)}
                 {palettesToRender}
                 
             </div>

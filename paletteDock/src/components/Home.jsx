@@ -8,40 +8,59 @@ import { useState } from "react"
 export default function Home()
 {
     const [navItem, setNavItem] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    const updateLoad = (value) => {
+        setLoading(value)
+    }
 
     const changeNavItem = (navID) => {
         setNavItem(navID);
     }
 
     const getPalettes = async() => {
+        updateLoad(true)
         try {
             const response = await fetch("https://palettedock.onrender.com/palettes")
             const data = await response.json()
             return data;
+            
         } catch (err) {
             alert(err.message)
             
+        } finally {
+        updateLoad(false)
+
         }
-        
     }
 
     return (
         <div className="home">
-            <NavBar changeNavItem={changeNavItem}/>
+            <div className="empty-top"></div>
+            <NavBar changeNavItem={changeNavItem} currNavItem={navItem}/>
 
             { //add
-            navItem == 0 && 
-                <AddPalette />
+            navItem == 0&& 
+                <AddPalette updateLoad = {updateLoad}/>
             }
 
             { //view all
-            navItem == 1 && 
-                <AllPalettes getAllPalettes={getPalettes}/>
+            navItem == 1&& 
+                <AllPalettes getAllPalettes={getPalettes} updateLoad = {updateLoad}/>
             }
 
             { //randomize
             navItem == 2 && 
-                <RandomPalette getAllPalettes={getPalettes}/>
+                <RandomPalette getAllPalettes={getPalettes} updateLoad = {updateLoad}/>
+            }
+
+            { //loading 
+            loading &&
+                <div className="load-screen horizontal-flex">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             }
 
         </div>
